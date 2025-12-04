@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stranger Safety Quiz</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f0f4f8; text-align:center; }
+    .card { background:#fff; padding:20px; margin:20px auto; width:70%; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.2); }
+    img { width:80px; height:80px; margin:10px; }
+    button { margin:10px; padding:12px 20px; font-size:16px; cursor:pointer; border-radius:6px; }
+    .feedback { font-weight:bold; margin-top:15px; }
+    .correct { color:green; }
+    .wrong { color:red; }
+  </style>
+</head>
+<body>
+  <h1>Stranger Safety Quiz</h1>
+  <div id="game" class="card"></div>
+
+  <script>
+    const questions = [
+      {person:"Parent", text:"Your parent asks for your school name to fill a form.", answer:true, img:"https://img.icons8.com/color/96/family.png"},
+      {person:"Cousin", text:"Your cousin asks for your full name to register you for a race with parent permission.", answer:true, img:"https://img.icons8.com/color/96/conference-call.png"},
+      {person:"Cousin", text:"Your cousin asks for your password to log into your account.", answer:false, img:"https://img.icons8.com/color/96/password.png"},
+      {person:"Teacher (email)", text:"An email says it's from your teacher asking for your home address.", answer:false, img:"https://img.icons8.com/color/96/email.png"},
+      {person:"Delivery worker", text:"A delivery worker without ID asks for your parents' names.", answer:false, img:"https://img.icons8.com/color/96/delivery.png"},
+      {person:"Online gamer", text:"A gamer you don’t know asks for your school name.", answer:false, img:"https://img.icons8.com/color/96/game-controller.png"},
+      {person:"Person in car", text:"A stranger in a car asks for your home address to send a gift.", answer:false, img:"https://img.icons8.com/color/96/car.png"},
+      {person:"Festival stall owner", text:"Someone at a stall asks for your phone number to win a prize.", answer:false, img:"https://img.icons8.com/color/96/fairground.png"},
+      {person:"Social media DM", text:"An unknown person asks for your photo and location.", answer:false, img:"https://img.icons8.com/color/96/chat.png"},
+      {person:"Doctor (with parent)", text:"Doctor asks for your full name while your parent is present.", answer:true, img:"https://img.icons8.com/color/96/doctor-male.png"},
+      {person:"School receptionist", text:"Receptionist asks for your class to call your teacher.", answer:true, img:"https://img.icons8.com/color/96/school.png"},
+      {person:"Email contest", text:"An email says enter your address to claim a prize.", answer:false, img:"https://img.icons8.com/color/96/prize.png"},
+      {person:"Neighbour’s friend", text:"Someone you don’t know asks what time you get home.", answer:false, img:"https://img.icons8.com/color/96/home.png"},
+      {person:"Coach (unknown number)", text:"A text says it’s your coach asking for your parents’ phone number.", answer:false, img:"https://img.icons8.com/color/96/whistle.png"},
+      {person:"Parent", text:"Your parent asks for your phone number to write on a school form.", answer:true, img:"https://img.icons8.com/color/96/phone.png"}
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function showQuestion() {
+      if (current >= questions.length) {
+        let message = score === questions.length ? 
+          <h2>You are safe! 🎉</h2><p>You got all ${score}/${questions.length} correct.</p> :
+          <h2>Quiz Over</h2><p>Your score: ${score}/${questions.length}</p>;
+        document.getElementById("game").innerHTML = message;
+        return;
+      }
+      const q = questions[current];
+      document.getElementById("game").innerHTML = `
+        <h3>Question ${current+1} of ${questions.length}</h3>
+        <img src="${q.img}" alt="${q.person}">
+        <p><strong>${q.person}:</strong> ${q.text}</p>
+        <button onclick="checkAnswer(true)">Yes — Give Info</button>
+        <button onclick="checkAnswer(false)">No — Do Not Give Info</button>
+        <div id="feedback"></div>
+      `;
+    }
+
+    function checkAnswer(choice) {
+      const q = questions[current];
+      const fb = document.getElementById("feedback");
+      if (choice === q.answer) {
+        score++;
+        fb.innerHTML = "<p class='feedback correct'>Correct! That was the safe choice.</p>";
+      } else {
+        fb.innerHTML = "<p class='feedback wrong'>Not safe! Think carefully next time.</p>";
+      }
+      current++;
+      setTimeout(showQuestion, 1500);
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
